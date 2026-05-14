@@ -1,0 +1,37 @@
+训练集：osunlp/Mind2Web
+测试集：解压密码 mind2web
+
+"annotation_id"（字符串）：每个任务的唯一 ID
+"website" (str): 网站名称
+域名（字符串）：网站域名
+“子域名”（字符串）：网站子域名
+"confirmed_task" (str): 任务描述
+"action_reprs"（list[str]）：动作序列的人类可读字符串表示形式
+“actions”（list[dict]）：完成任务所需的操作（步骤）列表
+"action_uid"（字符串）：每个操作（步骤）的唯一 ID
+"raw_html"（字符串）：执行操作之前的页面原始 HTML 代码。
+"cleaned_html"（字符串）：执行操作之前页面已清理的 HTML 代码。
+"operation"（字典）：要执行的操作
+“op”（字符串）：操作类型，取值范围为 CLICK、TYPE 或 SELECT。
+"original_op" (str): 原始操作类型，包含映射到 CLICK 的附加 HOVER 和 ENTER 操作，但未使用。
+“value”（字符串）：操作的可选值，例如，要输入的文本、要选择的选项。
+`pos_candidates`（list[dict]）：真实值元素。这里我们只包含预处理后存在于 `cleaned_html` 中的正例元素，因此 `pos_candidates` 可能为空。原始的带标签元素始终可以在 `raw_html` 中找到。
+“tag”（字符串）：元素的标签
+"is_original_target"（布尔值）：元素是否为标注者标注的原始目标元素
+"is_top_level_target"（布尔值）：该元素是否为我们的算法找到的顶级目标。更多详情请参阅论文。
+"backend_node_id"（字符串）：元素的唯一 ID
+"attributes" (str): 元素的序列化属性，用于json.loads转换回字典。
+"neg_candidates" (list[dict]): 页面中经过预处理后的其他候选元素，其结构与 "pos_candidates" 类似。
+
+
+训练集：1009 个实例
+测试：（为防止潜在的数据泄露，请查看我们的代码仓库以获取测试集信息。）
+跨任务：252 个实例，训练期间会看到来自同一网站的任务
+跨网站：177 次，这些网站在培训期间未被发现
+跨域：9、12 个实例，训练期间未观察到整个域
+
+
+
+
+
+
