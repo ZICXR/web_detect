@@ -25,13 +25,14 @@ def get_Mind2Web_limited(num_samples=10):
         
         dic = {
             "task": example.get('confirmed_task', ''),
-            "html": example["actions"][0].get('raw_html', '') if example.get("actions") else '',
+            "raw": example["actions"][0].get('raw_html', '') if example.get("actions") else '',
+            "clean": example["actions"][0].get('cleaned_html', '') if example.get("actions") else '',
             "ans": anss
         }
         l.append(dic)
     
     # 保存为 JSON 文件
-    with open(f'datasets/mind2web_{num_samples}.json', 'w', encoding='utf-8') as f:
+    with open(f'datasets/mind2web/mind2web_{num_samples}.json', 'w', encoding='utf-8') as f:
         json.dump(l, f, indent=2, ensure_ascii=False)
     
     print(f"已保存 {len(data_list)} 条数据")
