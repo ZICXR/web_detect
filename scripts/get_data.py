@@ -1,3 +1,5 @@
+import os
+
 from datasets import load_dataset
 import json
 
@@ -38,6 +40,42 @@ def get_Mind2Web_limited(num_samples=10):
     print(f"已保存 {len(data_list)} 条数据")
     return data_list
 
+def get_Mind2Web_local_file(file_path, num_samples=10):
+    """
+    加载本地指定的 Mind2Web JSON 文件
+    file_path: 如 "data/test_task/test_task_0.json"
+    """
+    # 使用 data_files 参数指定单个文件
+    dataset = load_dataset("json", data_files=file_path, split="train")
+    # 注意：load_dataset("json") 默认把数据映射到 "train" split
+    
+    l = []
+    
+    for i in range(min(num_samples, len(dataset))):
+        example = dataset[i]
+        
+        anss = []
+        if "actions" in example and len(example["actions"]) > 0:
+            for ans in example["actions"][0].get('pos_candidates', []):
+                anss.append(ans['backend_node_id'])
+        
+        dic = {
+            "task": example.get('confirmed_task', ''),
+            "raw": example["actions"][0].get('raw_html', '') if example.get("actions") else '',
+            "clean": example["actions"][0].get('cleaned_html', '') if example.get("actions") else '',
+            "ans": anss
+        }
+        l.append(dic)
+    
+    os.makedirs('datasets/mind2web', exist_ok=True)
+    filename = os.path.basename(file_path).replace('.json', '')
+    save_path = f'datasets/mind2web/mind2web_{filename}_{num_samples}.json'
+    with open(save_path, 'w', encoding='utf-8') as f:
+        json.dump(l, f, indent=2, ensure_ascii=False)
+    
+    print(f"已保存 {len(l)} 条数据到 {save_path}")
+    return l
 
 if __name__ == "__main__":
-    get_Mind2Web_limited()
+    # get_Mind2Web_limited()
+    get_Mind2Web_local_file(r'datasets\mind2web\test\test_website\test_website_0.json')
